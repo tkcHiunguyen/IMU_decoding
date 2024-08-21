@@ -2,15 +2,13 @@ import serial
 import time
 import struct
 
-# Cấu hình cổng serial
 port = 'COM13'
 baudrate = 115200
-timeout = 1  # Thời gian chờ đọc dữ liệu (giây)
+timeout = 1  
 
-# Khởi tạo kết nối serial
 ser = serial.Serial(port, baudrate, timeout=timeout)
 MSG_START_BYTE = b"\x75\x65"
-# Gửi lệnh kích hoạt stream dữ liệu
+
 buffer = bytearray()
 def classify_packet(descriptor, payload):
     offset=0
@@ -87,40 +85,8 @@ try:
                 Descriptor_Set_byte=byte[0]
                 classify_packet(Descriptor_Set_byte, Packet_payload)
         time.sleep(0.05)
-                # print(f"payload_length: {payload_length}")
-                # print(f"Packet_payload: {Packet_payload.hex()}")
-                # print("=================================")
-                
-
-        # if byte:
-           
-        #     if len(buffer) >= 6:  
-        #         while len(buffer) >= 6:
-        #             if buffer[0] == 0x75 and buffer[1] == 0x65 and (buffer[2] == 0x82 or buffer[2] == 0x80):
-        #                 payload_length = buffer[3]
-        #                 total_length = 4 + payload_length + 2  
-
-        #                 if len(buffer) >= total_length:
-        #                     packet = buffer[:total_length]
-        #                     # for b in packet:
-        #                     #     print(f'0x{b:02x}', end=' ')
-        #                     Descriptor_Set_byte=packet[2]
-        #                     Packet_payload=packet[4:-2]         
-        #                     # print(Descriptor_Set_byte)
-        #                     # print(Packet_payload.hex())
-        #                     classify_packet(Descriptor_Set_byte, Packet_payload)
-        #                     print()
-
-        #                     # Xóa gói dữ liệu đã xử lý khỏi buffer
-        #                     buffer = buffer[total_length:]
-        #                 else:
-        #                     break
-        #             else:
-        #                 buffer.pop(0)
-
 except KeyboardInterrupt:
     print("Program interrupted")
 finally:
-    # Đóng kết nối serial
     ser.close()
     print("Serial port closed")
